@@ -1,12 +1,5 @@
 # Claim 5 and 6 9/14
 
-rm(list=ls())
-dev.off()
-
-data<-read.csv("~/Dropbox/IndiaMisinformation_Sumitra/Data/Raw data (Qualtrics export 06:21)/ChauchardFlynn_India_rumors__MAIN_STUDY_27June.csv",stringsAsFactors = F)
-attach(data) 
-
-
 # claim 5 : australia cricket
 
 # no pure control
@@ -58,4 +51,3 @@ data$dv_HIV_new<-ifelse(dv_HIV==4, 4,
                           ifelse(dv_HIV==8, 2,
                                  ifelse(dv_HIV==10, 1, NA))))
 table(data$dv_HIV_new)
-
