@@ -1,12 +1,3 @@
-rm(list=ls())
-dev.off()
-
-library(foreign)
-data<-read.csv("~/Dropbox/IndiaMisinformation_Sumitra/Data/Raw data (Qualtrics export 06:21)/ChauchardFlynn_India_rumors__MAIN_STUDY_27June.csv",stringsAsFactors = F)
-dim(data)
-names(data)
-attach(data) #attaching dataset
-
 ### MMR (claim 3) ### 
 
 #pure control (no thread)
