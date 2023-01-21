@@ -1,14 +1,5 @@
 ### UNENSCO Modi (claim 8) ###
 
-rm(list=ls())
-dev.off()
-
-library(foreign)
-data<-read.csv("~/Dropbox/IndiaMisinformation_Sumitra/Data/Raw data (Qualtrics export 06:21)/ChauchardFlynn_India_rumors__MAIN_STUDY_27June.csv",stringsAsFactors = F)
-dim(data)
-names(data)
-attach(data)
-
 #pure control (no thread)
 UNESCOpcDummy<-ifelse(X8.pc1_HI==1|X8.pc2_HI==1|X8.pc3_HI==1|X8.pc4_HI==1|X8.pc5_HI==1|X8.pc6_HI==1|X8.pc7_HI==1|X8.pc8_HI==1|X8.pc9_HI==1, 1, 0)
 table(UNESCOpcDummy)
@@ -272,4 +263,3 @@ colnames(claim8data)[19] <- "AnyFactcheck"
 colnames(claim8data)[20] <- "Control"
 colnames(claim8data)[21] <- "AnySourced"
 head(claim8data)
-
