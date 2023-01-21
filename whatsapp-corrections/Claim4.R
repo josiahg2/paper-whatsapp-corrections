@@ -1,13 +1,4 @@
-# claim 4 coding and anaysis 9/13
-
-rm(list=ls())
-dev.off()
-
-library(foreign)
-data<-read.csv("~/Dropbox/IndiaMisinformation_Sumitra/Data/Raw data (Qualtrics export 06:21)/ChauchardFlynn_India_rumors__MAIN_STUDY_27June.csv",stringsAsFactors = F)
-dim(data)
-names(data)
-attach(data) 
+# claim 4 coding and analysis 9/13
 
 # coding gomutra (claim 4)
 
@@ -275,4 +266,3 @@ colnames(claim4data)[19] <- "AnyFactcheck"
 colnames(claim4data)[20] <- "Control"
 colnames(claim4data)[21] <- "AnySourced"
 head(claim4data)
-
