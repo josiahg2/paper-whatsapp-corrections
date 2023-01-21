@@ -1,13 +1,4 @@
-# claim 2 coding and anaysis 9/13
-
-rm(list=ls())
-dev.off()
-
-library(foreign)
-data<-read.csv("~/Dropbox/IndiaMisinformation_Sumitra/Data/Raw data (Qualtrics export 06:21)/ChauchardFlynn_India_rumors__MAIN_STUDY_27June.csv",stringsAsFactors = F)
-dim(data)
-names(data)
-attach(data) 
+# claim 2 coding and analysis 9/13
 
 # coding polygamy (claim 2)
 
@@ -19,7 +10,7 @@ table(PolygamypcDummy)
 data$PolygamypcDummy <- ifelse(X2.pc1_HI==1|X2.pc2_HI==1|X2.pc3_HI==1|X2.pc4_HI==1|X2.pc5_HI==1|X2.pc6_HI==1|X2.pc7_HI==1|X2.pc8_HI==1|X2.pc9_HI==1|X2.pc10_HI==1|X2.pc11_HI==1|X2.pc12_HI==1|X2.pc13_HI==1|X2.pc14_HI==1|X2.pc15_HI==1|X2.pc16_HI==1|X2.pc17_HI==1, 1, 0)
 table(data$PolygamypcDummy)
 
-# misinformnation, no correction (control) dummy
+# misinformation, no correction (control) dummy
 PolygamycontDummy <- ifelse(X2.1_HI==1 | X2.1copy_HI==1 | X2.1copy2_HI==1 | X2.1copy3_HI==1 | X2.1copy4_HI==1 |
                     X2.9_HI==1 | X2.9copy_HI==1 | X2.9copy2_HI==1 | X2.9copy3_HI==1 | X2.9copy4_HI==1 |
                     X2.17_HI==1| X2.17copy_HI==1| X2.17copy2_HI==1| X2.17copy3_HI==1| X2.17copy4_HI==1|
@@ -280,6 +271,3 @@ colnames(claim2data)[19] <- "AnyFactcheck"
 colnames(claim2data)[20] <- "Control"
 colnames(claim2data)[21] <- "AnySourced"
 head(claim2data)
-
-write.csv(claim2data, "~/Dropbox/IndiaMisinformation_Sumitra/IJPP_Submission/claim2.csv")
-
