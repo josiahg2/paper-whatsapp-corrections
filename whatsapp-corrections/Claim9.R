@@ -1,14 +1,5 @@
 # Claim 9 coding & analysis 9/14
 
-rm(list=ls())
-dev.off()
-
-library(foreign)
-data<-read.csv("~/Dropbox/IndiaMisinformation_Sumitra/Data/Raw data (Qualtrics export 06:21)/ChauchardFlynn_India_rumors__MAIN_STUDY_27June.csv",stringsAsFactors = F)
-dim(data)
-names(data)
-attach(data) 
-
 # claim 9. Bose plane crash
 
 ## Creating pure control dummy
@@ -158,4 +149,3 @@ colnames(claim9data)[15] <- "AnyFactcheck"
 colnames(claim9data)[16] <- "Control"
 colnames(claim9data)[17] <- "AnySourced"
 head(claim9data)
-
