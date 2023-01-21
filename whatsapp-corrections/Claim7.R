@@ -1,14 +1,5 @@
 # claim 7 coding and anaysis 9/14
 
-rm(list=ls())
-dev.off()
-
-library(foreign)
-data<-read.csv("~/Dropbox/IndiaMisinformation_Sumitra/Data/Raw data (Qualtrics export 06:21)/ChauchardFlynn_India_rumors__MAIN_STUDY_27June.csv",stringsAsFactors = F)
-dim(data)
-names(data)
-attach(data) 
-
 # coding EVM (claim 7)
 
 # pure control
@@ -271,4 +262,3 @@ colnames(claim7data)[19] <- "AnyFactcheck"
 colnames(claim7data)[20] <- "Control"
 colnames(claim7data)[21] <- "AnySourced"
 head(claim7data)
-
