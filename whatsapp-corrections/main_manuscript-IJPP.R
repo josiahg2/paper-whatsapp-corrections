@@ -1,9 +1,30 @@
 # replication for IJPP: main manuscript
 # december 28, 2022
-# dependencies: first run claim 1 thru claim 9
 
-##### main: figure 1 #####
+##### run dependencies #####
 
+# run these files before running the rest of this script
+source("loaddata.R")
+source("Claim1.R")
+source("Claim2.R")
+source("Claim3.R")
+source("Claim4.R")
+source("Claim5-6.R")
+source("Claim7.R")
+source("Claim8.R")
+source("Claim9.R")
+
+##### load packages #####
+
+library(dplyr)
+library(dotwhisker)
+library(ggplot2)
+library(multiwayvcov)
+library(stargazer)
+
+##### create subsets #####
+
+# remove NAs
 claim1new <- claim1data[!is.na(claim1data$dv_muslimpop_new),]
 claim2new <- claim2data[!is.na(claim2data$dv_polygamy_new),]
 claim3new <- claim3data[!is.na(claim3data$dv_MMR_new),]
@@ -12,6 +33,7 @@ claim7new <- claim7data[!is.na(claim7data$dv_EVM_new),]
 claim8new <- claim8data[!is.na(claim8data$dv_UNESCO_new),]
 claim9new <- claim9data[!is.na(claim9data$dv_bose_new),]
 
+# create treatment groups
 treat1 <- subset(claim1new, claim1new$AnyCorrection==1)
 treat2 <- subset(claim2new, claim2new$AnyCorrection==1)
 treat3 <- subset(claim3new, claim3new$AnyCorrection==1)
@@ -20,6 +42,7 @@ treat7 <- subset(claim7new, claim7new$AnyCorrection==1)
 treat8 <- subset(claim8new, claim8new$AnyCorrection==1)
 treat9 <- subset(claim9new, claim9new$AnyCorrection==1)
 
+# create control groups
 cont1 <- subset(claim1new, claim1new$AnyCorrection==0)
 cont2 <- subset(claim2new, claim2new$AnyCorrection==0)
 cont3 <- subset(claim3new, claim3new$AnyCorrection==0)
@@ -27,6 +50,51 @@ cont4 <- subset(claim4new, claim4new$AnyCorrection==0)
 cont7 <- subset(claim7new, claim7new$AnyCorrection==0)
 cont8 <- subset(claim8new, claim8new$AnyCorrection==0)
 cont9 <- subset(claim9new, claim9new$AnyCorrection==0)
+
+##### stacked table #####
+
+new1 <- claim1new[c("dv_muslimpop_new","AnyCorrection", "V29", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
+                    ,"DissonantMedia", "Control", "PureControl", "AnySourced")]
+colnames(new1)[1] <- "dv"
+new1$claim <- "claim1"
+
+new2 <- claim2new[c("dv_polygamy_new","AnyCorrection", "V29", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
+                    ,"DissonantMedia", "Control", "PureControl", "AnySourced")]
+colnames(new2)[1] <- "dv"
+new2$claim <- "claim2"
+
+new3 <- claim3new[c("dv_MMR_new","AnyCorrection", "V21", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
+                    ,"DissonantMedia", "Control", "PureControl", "AnySourced")]
+colnames(new3)[1] <- "dv"
+colnames(new3)[3] <- "V29"
+new3$claim <- "claim3"
+
+new4 <- claim4new[c("dv_gomutra_new","AnyCorrection", "V29", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
+                    , "DissonantMedia", "Control", "PureControl", "AnySourced")]
+colnames(new4)[1] <- "dv"
+new4$claim <- "claim4"
+
+new7 <- claim7new[c("dv_EVM_new","AnyCorrection", "V25", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
+                    ,"DissonantMedia", "Control", "PureControl", "AnySourced")]
+colnames(new7)[1] <- "dv"
+colnames(new7)[3] <- "V29"
+new7$claim <- "claim7"
+
+new8 <- claim8new[c("dv_UNESCO_new","AnyCorrection", "V25", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
+                    , "DissonantMedia", "Control", "PureControl", "AnySourced")]
+colnames(new8)[1] <- "dv"
+colnames(new8)[3] <- "V29"
+new8$claim <- "claim8"
+
+new9 <- claim9new[c("dv_bose_new","AnyCorrection", "V21", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
+                    , "DissonantMedia", "Control", "PureControl", "AnySourced")]
+colnames(new9)[1] <- "dv"
+colnames(new9)[3] <- "V29"
+new9$claim <- "claim9"
+
+stacked <- rbind(new1, new2, new3, new4, new7, new8, new9)
+
+##### main: figure 1 #####
 
 # extract proportion strongly + somewhat believe for control group
 dv1 <- prop.table(table(cont1$dv_muslimpop_new))[3] + prop.table(table(cont1$dv_muslimpop_new))[4] 
@@ -46,8 +114,8 @@ pct_belief <- c(dv1, dv2, dv3, dv4, dv5, dv6, dv7, dv8, dv9)
 belief_data <- data.frame(pct_belief,rumors, Veracity)
 belief_data$pct_belief <- belief_data$pct_belief*100
 
-#graph
-library(ggplot2)
+# graph
+
 q <- ggplot(data=belief_data, aes(x=reorder(rumors, -pct_belief), y=pct_belief, fill=Veracity)) +
   geom_bar(stat="identity", width = 0.7, position=position_dodge()) +
   geom_text(aes(label = round(pct_belief, digits=1)), vjust = -0.3) +
@@ -59,49 +127,6 @@ q + theme_bw() +
 
 
 ##### main: figure 2 #####
-new1 <- claim1new[c("dv_muslimpop_new","AnyCorrection", "V29", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
-                    ,"DissonantMedia", "Control", "PureControl", "AnySourced")]
-colnames(new1)[1] <- "dv"
-new1$claim <- NA
-new1$claim <- rep("claim1", nrow(new1))
-new2 <- claim2new[c("dv_polygamy_new","AnyCorrection", "V29", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
-                    ,"DissonantMedia", "Control", "PureControl", "AnySourced")]
-colnames(new2)[1] <- "dv"
-new2$claim <- NA
-new2$claim <- rep("claim2", nrow(new2))
-new3 <- claim3new[c("dv_MMR_new","AnyCorrection", "V21", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
-                    ,"DissonantMedia", "Control", "PureControl", "AnySourced")]
-colnames(new3)[1] <- "dv"
-colnames(new3)[3] <- "V29"
-new3$claim <- NA
-new3$claim <- rep("claim3", nrow(new3))
-new4 <- claim4new[c("dv_gomutra_new","AnyCorrection", "V29", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
-                    , "DissonantMedia", "Control", "PureControl", "AnySourced")]
-colnames(new4)[1] <- "dv"
-new4$claim <- NA
-new4$claim <- rep("claim4", nrow(new4))
-new7 <- claim7new[c("dv_EVM_new","AnyCorrection", "V25", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
-                    ,"DissonantMedia", "Control", "PureControl", "AnySourced")]
-colnames(new7)[1] <- "dv"
-colnames(new7)[3] <- "V29"
-new7$claim <- NA
-new7$claim <- rep("claim7", nrow(new7))
-new8 <- claim8new[c("dv_UNESCO_new","AnyCorrection", "V25", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
-                    , "DissonantMedia", "Control", "PureControl", "AnySourced")]
-colnames(new8)[1] <- "dv"
-colnames(new8)[3] <- "V29"
-new8$claim <- NA
-new8$claim <- rep("claim8", nrow(new8))
-new9 <- claim9new[c("dv_bose_new","AnyCorrection", "V21", "Peer", "Expert", "AnyFactcheck", "CongenialMedia"    
-                    , "DissonantMedia", "Control", "PureControl", "AnySourced")]
-colnames(new9)[1] <- "dv"
-colnames(new9)[3] <- "V29"
-new9$claim <- NA
-new9$claim <- rep("claim9", nrow(new9))
-
-stacked <- rbind(new1, new2, new3, new4, new7, new8, new9)
-
-stacked_new <- rbind(new1, new2, new4, new7, new8)
 
 treat_all <- subset(stacked, stacked$AnyCorrection==1)
 cont_all <- subset(stacked, stacked$AnyCorrection==0)
@@ -169,31 +194,31 @@ p + theme_bw() +
 ##### main: table 3 #####
 
 # rumor 1
-claim1_h1controls <- lm(dv_muslimpop_new ~ AnyCorrection + DissonantMedia + 
+claim1_h1control <- lm(dv_muslimpop_new ~ AnyCorrection + DissonantMedia + 
                         CongenialMedia + CopartisanSpeaker + OutpartisanSpeaker, 
                         data=claim1data)
 # rumor 2
-claim2_h1controls <- lm(dv_polygamy_new ~ AnyCorrection + DissonantMedia + CongenialMedia + 
+claim2_h1control <- lm(dv_polygamy_new ~ AnyCorrection + DissonantMedia + CongenialMedia + 
                           CopartisanSpeaker + OutpartisanSpeaker, data=claim2data)
 # rumor 3
-claim3_h1controls <- lm(dv_MMR_new ~ AnyCorrection + DissonantMedia + CongenialMedia, 
+claim3_h1control <- lm(dv_MMR_new ~ AnyCorrection + DissonantMedia + CongenialMedia, 
                         data=claim3data)
 # rumor 4
-claim4_h1controls <- lm(dv_gomutra_new ~ AnyCorrection + DissonantMedia + CongenialMedia + 
+claim4_h1control <- lm(dv_gomutra_new ~ AnyCorrection + DissonantMedia + CongenialMedia + 
                         CopartisanSpeaker + OutpartisanSpeaker, data=claim4data)
 # rumor 7
-claim7_h1controls <- lm(dv_EVM_new ~ AnyCorrection +
+claim7_h1control <- lm(dv_EVM_new ~ AnyCorrection +
                           DissonantMedia + CongenialMedia + 
                           CopartisanSpeaker + OutpartisanSpeaker, data=claim7data)
 # rumor 8
-claim8_h1controls <- lm(dv_UNESCO_new ~ AnyCorrection + DissonantMedia + CongenialMedia + 
+claim8_h1control <- lm(dv_UNESCO_new ~ AnyCorrection + DissonantMedia + CongenialMedia + 
                         CopartisanSpeaker + OutpartisanSpeaker, data=claim8data)
 # rumor 9
-claim9_h1controls <- lm(dv_bose_new ~ AnyCorrection + DissonantMedia + CongenialMedia, 
+claim9_h1control <- lm(dv_bose_new ~ AnyCorrection + DissonantMedia + CongenialMedia, 
                         data=claim9data)
 # table
-stargazer(claim1_h1controls, claim2_h1controls, claim3_h1controls, claim4_h1controls, 
-          claim7_h1controls, claim8_h1controls, claim9_h1controls)
+stargazer(claim1_h1control, claim2_h1control, claim3_h1control, claim4_h1control, 
+          claim7_h1control, claim8_h1control, claim9_h1control)
 
 
 ##### main: table 4 #####
@@ -238,9 +263,6 @@ claim8_h4b <- lm(dv_UNESCO_new ~ AnyCorrection * DissonantClaim, data=claim8data
 stargazer(claim1_h4b, claim2_h4b, claim4_h4b, claim7_h4b, claim8_h4b)
 
 ##### main: table 6 #####
-install.packages("multiwayvcov")
-library(multiwayvcov)
-library(stargazer)
 
 # control and any correction regression
 bivariate1 <- lm(dv ~ AnyCorrection, data=stacked)
