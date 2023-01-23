@@ -14,4 +14,4 @@ The following files are contained in the whatsapp-corrections zip file
 
 ## Replication Code and Data
 
-To download the data needed to replicate this paper in zipped format, please click [here](<https://github.com/SumitraBadrinathan/paper-whatsapp-corrections/blob/main/whatsapp-corrections.zip> "Optional title").
+To download the data needed to replicate this paper in zipped format, please click [here](<https://github.com/SumitraBadrinathan/paper-whatsapp-corrections/blob/main/whatsapp-corrections.zip> "Replication files").
